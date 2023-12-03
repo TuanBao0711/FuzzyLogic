@@ -9,11 +9,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QWidget,QApplication, QMainWindow, QFileDialog, QMessageBox, QDesktopWidget , QVBoxLayout, QHBoxLayout, QSizePolicy, QLineEdit
 from Fuzzy import Fuzzy
 from Result import MyMplCanvas, ResulWindow
 from Step1 import FuzzyPlotApp
 from Step2 import TableWindow
-from Step3 import FuzzyPlotAppStep3
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -112,18 +113,43 @@ class Ui_MainWindow(object):
         
 
     def Step3(self):
-        self.gdp_value = float(self.lineEdit.text())
-        self.unemploy_value = float(self.lineEdit_2.text())
-        self.infla_value = float(self.lineEdit_3.text())
-        self.Fuzzy = Fuzzy(self.gdp_value, self.unemploy_value, self.infla_value)
-        self.memberGDP = self.Fuzzy.getMemberGDP()
-        self.memberUnemp = self.Fuzzy.getMemberUnemp()
-        self.memberInfla = self.Fuzzy.getMemberInfla()
-        
-        self.resultUI = ResulWindow(self.gdp_value, self.unemploy_value, self.infla_value,self.Fuzzy.getResult(), self.memberGDP, self.memberUnemp, self.memberInfla, self.Fuzzy.membership_low, self.Fuzzy.membership_medium, self.Fuzzy.membership_high)
-        
-        # self.resultUI.plot_graph()
-        self.resultUI.show()
+        if not self.lineEdit.text() :
+            mess = QMessageBox()
+            mess.setWindowTitle('Lỗi')
+            mess.setText('Chưa nhập số GDP kìa thằng ngu!!!')
+            mess.setIcon(QMessageBox.Warning)  #Critical, Warning, Information, Question
+            mess.setStandardButtons(QMessageBox.Ok)
+            mess.setDefaultButton(QMessageBox.Ok)
+            x = mess.exec_()
+        elif not self.lineEdit_2.text():
+            mess = QMessageBox()
+            mess.setWindowTitle('Lỗi')
+            mess.setText('Chưa nhập tỷ lệ thất nghiệp kìa thằng ngu!!!')
+            mess.setIcon(QMessageBox.Warning)  #Critical, Warning, Information, Question
+            mess.setStandardButtons(QMessageBox.Ok)
+            mess.setDefaultButton(QMessageBox.Ok)
+            x = mess.exec_()
+        elif not self.lineEdit_3.text() :
+            mess = QMessageBox()
+            mess.setWindowTitle('Lỗi')
+            mess.setText('Chưa nhập tỷ lệ lạm phát kìa thằng ngu!!!')
+            mess.setIcon(QMessageBox.Warning)  #Critical, Warning, Information, Question
+            mess.setStandardButtons(QMessageBox.Ok)
+            mess.setDefaultButton(QMessageBox.Ok)
+            x = mess.exec_()
+        else:
+            self.gdp_value = float(self.lineEdit.text())
+            self.unemploy_value = float(self.lineEdit_2.text())
+            self.infla_value = float(self.lineEdit_3.text())
+            self.Fuzzy = Fuzzy(self.gdp_value, self.unemploy_value, self.infla_value)
+            self.memberGDP = self.Fuzzy.getMemberGDP()
+            self.memberUnemp = self.Fuzzy.getMemberUnemp()
+            self.memberInfla = self.Fuzzy.getMemberInfla()
+            
+            self.resultUI = ResulWindow(self.gdp_value, self.unemploy_value, self.infla_value,self.Fuzzy.getResult(), self.memberGDP, self.memberUnemp, self.memberInfla, self.Fuzzy.membership_low, self.Fuzzy.membership_medium, self.Fuzzy.membership_high)
+            
+            # self.resultUI.plot_graph()
+            self.resultUI.show()
         
     
     def Step1(self):
